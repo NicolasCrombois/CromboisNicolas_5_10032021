@@ -1,0 +1,161 @@
+@font-face {
+  font-family: "OpenSans-Bold";
+  src: url("../fonts/OpenSans-Bold.ttf"); }
+@font-face {
+  font-family: "OpenSans-Semibold";
+  src: url("../fonts/OpenSans-Semibold.ttf"); }
+@font-face {
+  font-family: "OpenSans-Regular";
+  src: url("../fonts/OpenSans-Regular.ttf"); }
+@font-face {
+  font-family: "OpenSans-Light";
+  src: url("../fonts/OpenSans-Light.ttf"); }
+header {
+  background-color: #f3e9f1;
+  height: 90px;
+  box-shadow: 0px 1px 5px black; }
+  header #logo {
+    padding-left: 5%; }
+    header #logo img {
+      background-size: cover;
+      height: 80px; }
+  header .navbar {
+    padding: 0; }
+    header .navbar button {
+      margin-right: 5%; }
+    header .navbar #navbarContent {
+      z-index: 1;
+      background-color: #f5ecf3; }
+      header .navbar #navbarContent ul {
+        margin-left: auto;
+        margin-right: 0;
+        border-top: solid #b8b8b8 1px; }
+        header .navbar #navbarContent ul li a {
+          padding-left: 15px;
+          font-family: OpenSans-Semibold;
+          font-size: 20px;
+          color: black;
+          text-decoration: none;
+          text-shadow: none;
+          transition: text-shadow 0.2s; }
+          header .navbar #navbarContent ul li a:hover {
+            text-shadow: 1.5px 1.5px 0px rgba(143, 91, 254, 0.5);
+            transition: color 0.4s, text-shadow 0.2s; }
+
+@media (min-width: 768px) {
+  header .navbar #navbarContent {
+    background-color: #f3e9f1; }
+
+  #navbarContent ul {
+    border-top: 0px !important;
+    margin-right: 5% !important; } }
+footer {
+  background-color: #f3e9f1;
+  margin-top: 30px;
+  padding: 45px 0; }
+  footer p {
+    margin: 0;
+    font-size: 18px;
+    font-family: OpenSans-Regular; }
+
+#product {
+  min-height: 75vh; }
+  #product .product-divImage {
+    width: 100%; }
+    #product .product-divImage .product-img {
+      display: block;
+      object-fit: cover;
+      margin: auto;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      max-height: 50vh;
+      height: 80%;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px #a1a1a1; }
+  #product .product-name {
+    margin: 45px 0 15px 0;
+    text-transform: uppercase;
+    width: 100%; }
+  #product .customText {
+    margin: 20px 0%;
+    font-size: 16px;
+    font-family: OpenSans-Regular; }
+  #product .product-globalCustom label.customText {
+    margin-right: 5px; }
+  #product .product-globalCustom .product-input-quantity {
+    width: auto;
+    margin: 0; }
+  #product .product-globalCustom .productGlobalForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0; }
+    #product .product-globalCustom .productGlobalForm .product-form {
+      margin: 10px 0; }
+      #product .product-globalCustom .productGlobalForm .product-form input[type="radio"] {
+        opacity: 0;
+        position: fixed;
+        width: 0; }
+      #product .product-globalCustom .productGlobalForm .product-form label {
+        display: inline-block;
+        background-color: #ececec;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: 2px solid #a5a5a5;
+        border-radius: 10px; }
+      #product .product-globalCustom .productGlobalForm .product-form input[type="radio"]:checked + label {
+        background-color: #f7f3ff;
+        border-color: #b28efe; }
+      #product .product-globalCustom .productGlobalForm .product-form input[type="radio"]:focus + label {
+        border: 2px double #1d0159; }
+  #product .product-globalCustom input[type="number"] {
+    border-radius: 12px; }
+  #product .product-globalCustom input[type="number"]:focus {
+    border: 2px double #1d0159; }
+  #product .product-globalCustom input[type=number]::-webkit-inner-spin-button, #product .product-globalCustom input[type=number]::-webkit-outer-spin-button {
+    background-color: #8f5bfe;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    margin: 0; }
+  #product .product-ContainerPrice {
+    width: 100%;
+    text-align: right;
+    padding-right: 50px;
+    max-height: 60px;
+    margin-top: 50px; }
+    #product .product-ContainerPrice .product-price {
+      color: #740000;
+      font-size: 18px;
+      font-family: OpenSans-Semibold; }
+  #product button {
+    display: block;
+    background-color: #8f5bfe;
+    border-color: #8f5bfe;
+    padding: 0.475rem 1.85rem;
+    margin: 20px auto;
+    max-height: 50px; }
+
+@media screen and (min-width: 768px) {
+  #product {
+    display: inline-flex;
+    flex-flow: row wrap; }
+    #product .product-divImage {
+      width: 45%; }
+      #product .product-divImage .product-img {
+        width: 80%;
+        max-width: 80%; }
+    #product .product-globalCustom {
+      width: 55%; }
+    #product .product-ContainerPrice {
+      margin-top: 0; }
+
+  #product .customText {
+    margin: 20px 10%; }
+
+  #product .productGlobalForm {
+    margin: 0 10%; } }
+
+/*# sourceMappingURL=product.css.map */

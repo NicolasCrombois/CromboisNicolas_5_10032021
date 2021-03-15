@@ -1,0 +1,105 @@
+
+
+
+.texture-paper::before
+    background: url("../img/texture-paper.png")
+    background-size: cover
+
+.bloc-bg-texture::before
+    content: ""
+    background-size: 2px 2px
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+
+$background-color: #f3e9f1
+$secundary-color: #8f5bfe
+$primary-color: #e58a0a
+
+@keyframes progress-card
+    from
+        transform: translate(0, 25%)
+        opacity: 0
+    to
+        transform: translate(0, 0)
+        opacity: 1
+
+@import "./layout/header.sass"
+
+
+#bannerShop
+    color: white
+    text-align: center
+    height: 350px
+    background-image: url("../img/photo-1540959733332-eab4deabeeaf.webp")
+    background-size: cover
+    background-position: 50% 78%
+    background-repeat: no-repeat
+    background-color: #B3B3B3
+    position: relative
+    & .row
+        position: relative
+        margin: auto
+        padding-top: 13.5px
+        & .titleShop
+            margin: auto
+            & #titleContainer
+                font-size: 24px
+                display: inline-flex
+                font-family: OpenSans-Semibold
+                margin: 20px 0 0 0
+            & p.description
+                font-size: 16px
+                font-family: OpenSans-Light
+                margin-top: 10px
+            & h1
+                display: inline-flex
+                font-family: OpenSans-Bold
+
+#main
+    & h2 
+        text-align: center
+        margin: 35px 0 25px 0
+    & .card-list
+        justify-content: space-between
+        & .card
+            width: 95%
+            margin: auto
+            position: relative
+            margin-bottom: 30px
+            box-shadow: 0px 0px 5px #00000049
+            transform: translate(0, 25%)
+            animation-name: progress-card
+            animation-fill-mode: forwards
+            animation-delay: 200ms
+            opacity: 0
+            & span 
+                font-family: OpenSans-Semibold
+                color: $primary-color
+            & img
+                width: 100%
+                height: 180px
+                object-fit: cover
+                border-radius: 5px
+                margin-bottom: 20px
+
+@import "./layout/footer.sass"
+
+@media (min-width: 420px) and (max-width: 447px)
+    #bannerShop .row
+        padding-top: 62.5px 
+
+@media (min-width: 448px)
+    #bannerShop .row
+        padding-top: 71.5px 
+        & .titleShop
+            & p.description
+                font-size: 18px
+    #main .card-list .card 
+        max-width: 47%
+        
+@media (min-width: 768px)
+    #main .card-list .card 
+        width: 32%

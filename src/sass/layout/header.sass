@@ -1,0 +1,40 @@
+@import "../utils/variable.sass"
+@import "../utils/fonts.sass"
+header
+    background-color: $background-color
+    height: 90px
+    box-shadow: 0px 1px 5px black
+    & #logo
+        padding-left: 5%
+        & img
+            background-size: cover
+            height: 80px
+    & .navbar
+        padding: 0
+        & button 
+            margin-right: 5%
+        & #navbarContent
+            z-index: 1
+            background-color: lighten($background-color, 1%)
+            & ul
+                margin-left: auto
+                margin-right: 0
+                border-top: solid #b8b8b8 1px
+                & li
+                    & a
+                        padding-left: 15px
+                        font-family: OpenSans-Semibold
+                        font-size: 20px
+                        color: black
+                        text-decoration: none
+                        text-shadow: none
+                        transition: text-shadow 0.2s
+                        &:hover
+                            text-shadow: 1.5px 1.5px 0px rgba(143,91,254, 0.5)
+                            transition: color 0.4s, text-shadow 0.2s
+@media (min-width: 768px)
+    header .navbar #navbarContent
+        background-color: $background-color 
+    #navbarContent ul
+        border-top: 0px !important
+        margin-right: 5% !important
