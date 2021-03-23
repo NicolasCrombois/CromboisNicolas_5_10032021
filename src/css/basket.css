@@ -1,0 +1,164 @@
+.texture-paper::before {
+  background: url("../img/texture-paper.png");
+  background-size: cover; }
+
+.bloc-bg-texture::before {
+  content: "";
+  background-size: 2px 2px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+@font-face {
+  font-family: "OpenSans-Bold";
+  src: url("../fonts/OpenSans-Bold.ttf"); }
+@font-face {
+  font-family: "OpenSans-Semibold";
+  src: url("../fonts/OpenSans-Semibold.ttf"); }
+@font-face {
+  font-family: "OpenSans-Regular";
+  src: url("../fonts/OpenSans-Regular.ttf"); }
+@font-face {
+  font-family: "OpenSans-Light";
+  src: url("../fonts/OpenSans-Light.ttf"); }
+header {
+  background-color: #f3e9f1;
+  height: 90px;
+  box-shadow: 0px 1px 5px black; }
+  header #logo {
+    padding-left: 5%; }
+    header #logo img {
+      background-size: cover;
+      height: 80px; }
+  header .navbar {
+    padding: 0; }
+    header .navbar button {
+      margin-right: 5%; }
+    header .navbar #navbarContent {
+      z-index: 1;
+      background-color: #f5ecf3; }
+      header .navbar #navbarContent ul {
+        margin-left: auto;
+        margin-right: 0;
+        border-top: solid #b8b8b8 1px; }
+        header .navbar #navbarContent ul li a {
+          padding-left: 15px;
+          font-family: OpenSans-Semibold;
+          font-size: 20px;
+          color: black;
+          text-decoration: none;
+          text-shadow: none;
+          transition: text-shadow 0.2s; }
+          header .navbar #navbarContent ul li a:hover {
+            text-shadow: 1.5px 1.5px 0px rgba(143, 91, 254, 0.5);
+            transition: color 0.4s, text-shadow 0.2s; }
+
+@media (min-width: 768px) {
+  header .navbar #navbarContent {
+    background-color: #f3e9f1; }
+
+  #navbarContent ul {
+    border-top: 0px !important;
+    margin-right: 5% !important; } }
+footer {
+  background-color: #f3e9f1;
+  margin-top: 30px;
+  padding: 45px 0; }
+  footer p {
+    margin: 0;
+    font-size: 18px;
+    font-family: OpenSans-Regular; }
+
+#bannerShop {
+  color: white;
+  text-align: center;
+  height: 200px;
+  background-image: url("../img/photo-1540959733332-eab4deabeeaf.webp");
+  background-size: cover;
+  background-position: 50% 56%;
+  background-repeat: no-repeat;
+  background-color: #B3B3B3;
+  position: relative; }
+  #bannerShop .row {
+    position: relative;
+    margin: auto;
+    padding-top: 13.5px; }
+    #bannerShop .row .titleShop {
+      margin: auto;
+      top: 40px; }
+      #bannerShop .row .titleShop #titleContainer {
+        font-size: 32px;
+        display: inline-flex;
+        font-family: OpenSans-Semibold;
+        margin: 20px 0 0 0; }
+      #bannerShop .row .titleShop h1 {
+        font-size: 42px;
+        display: inline-flex;
+        font-family: OpenSans-Bold; }
+
+#main {
+  min-height: 54vh; }
+  #main span {
+    width: 35%;
+    font-weight: 700; }
+  #main .card-list .product-globalProduct {
+    margin-top: 35px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #737373; }
+    #main .card-list .product-globalProduct .product-name {
+      margin-bottom: 15px;
+      width: 100%; }
+    #main .card-list .product-globalProduct .product-img {
+      width: 20%;
+      border-radius: 5px;
+      background-size: cover; }
+    #main .card-list .product-globalProduct .product-information {
+      width: 65%;
+      display: flex;
+      flex-wrap: wrap; }
+      #main .card-list .product-globalProduct .product-information .customText {
+        margin-right: 7px;
+        width: 35%;
+        text-align: right; }
+      #main .card-list .product-globalProduct .product-information .product-ContainerPrice {
+        width: 35%;
+        text-align: right;
+        margin-right: 7px; }
+    #main .card-list .product-globalProduct .delete-product {
+      font-size: 32px;
+      color: red;
+      position: absolute;
+      top: calc( 50% - 31px);
+      right: 30px; }
+  #main #total-price {
+    font-size: 22px;
+    margin-top: 75px;
+    padding: 25px 0 35px 0;
+    position: relative; }
+    #main #total-price::before {
+      content: "";
+      display: block;
+      width: 90%;
+      height: 2px;
+      background: #b46d08;
+      top: -20px;
+      left: 5%;
+      position: absolute; }
+    #main #total-price .textPrice {
+      color: #b46d08;
+      text-align: right;
+      margin-right: 65px; }
+      #main #total-price .textPrice span {
+        color: black; }
+
+#main .product-globalProduct .product-img {
+  width: 20%; }
+
+/*# sourceMappingURL=basket.css.map */

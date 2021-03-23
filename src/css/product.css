@@ -151,11 +151,23 @@ footer {
       width: 55%; }
     #product .product-ContainerPrice {
       margin-top: 0; }
+    #product .alert {
+      width: 50%;
+      margin: auto;
+      display: block;
+      position: absolute;
+      bottom: 18%;
+      text-align: center;
+      transform-origin: 50% 50%;
+      left: 7%; }
 
   #product .customText {
     margin: 20px 10%; }
 
   #product .productGlobalForm {
     margin: 0 10%; } }
+@media screen and (min-width: 992px) {
+  #product .alert {
+    left: 25%; } }
 
 /*# sourceMappingURL=product.css.map */

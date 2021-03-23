@@ -5,13 +5,13 @@
 		<meta name="viewport" content="width=device-width">
 		<meta name="description" content="Orinoco, site de commerce d'ours en peluche, de caméras vintage et de meuble en chêne">
 
-		<title>ORINOCO - Shop</title>
+		<title>ORINOCO - Panier</title>
 		
 		<!-- Ajout des fichiers CSS de Bootstrap-->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	
 		<!-- Ajout des fichiers CSS locaux -->
-		<link rel="stylesheet" type="text/css" href="src/css/default.css">
+		<link rel="stylesheet" type="text/css" href="src/css/basket.css">
 		</head>
 	<body>
 		<header class="container-fluid">
@@ -25,12 +25,12 @@
 				<div id="navbarContent" class="collapse navbar-collapse">	
 					<ul class="navbar-nav">
 						<li class="nav-item active">
-							<a href="#" class="nav-link">
+							<a href="index.html" class="nav-link">
 								CATALOGUE
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="basket.html" class="nav-link">
+							<a href="#" class="nav-link">
 								PANIER
 								<i class="fas fa-shopping-basket"></i>
 							</a>
@@ -43,35 +43,19 @@
 			<div class="container">
 				<div class="row">
 					<div class="col col-md-8 titleShop">
-						<p id="titleContainer">Bienvenue sur </p>
-						<h1>Orinoco</h1>
-					<p class="description">Vous trouverez sur Orinoco différents objets, meubles, outils, vêtements et tout un tas d'autre article. En quelques clics, ajouter vos articles dans votre panier, valider-le, et en quelques jours vous les receverez.</p>
+						<p id="titleContainer">Votre</p>
+						<h1>Panier</h1>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="container" id="main">
-			<h2>NOS PRODUITS</h2>
-			<div class="allCategoryProduct">
-				<p>
-					Filtres à appliquer:
-				</p>
-				<div class="categoryProduct">
-					<input class="category-input" type="checkbox" name="category" id="teddies" onclick="selectCategoryProduct()">
-					<label class="category-label" for="teddies">Oursons en peluche</label>
-				</div>
-				<div class="categoryProduct">
-					<input class="category-input" type="checkbox" name="category" id="furniture" onclick="selectCategoryProduct()">
-					<label class="category-label" for="furniture">Meubles</label>
-				</div>
-				<div class="categoryProduct">
-					<input class="category-input" type="checkbox" name="category" id="cameras" onclick="selectCategoryProduct()">
-					<label class="category-label" for="cameras">Caméras / Appareils Photo</label>
-				</div>
-			</div>
 			<div class="row card-list">
 				
 			</div>
+            <div id="total-price">
+                
+            </div>
 		</div>
 
 
@@ -84,7 +68,7 @@
 		<script src="https://kit.fontawesome.com/1946d7ed35.js" crossorigin="anonymous"></script>
 
 		<!-- add local js script -->
-		<script src="src/js/default.js"></script>
+		<script src="src/js/basket.js"></script>
 		<footer>
 			<p class="text-center">Orinoco - 2021</p>
 		</footer>

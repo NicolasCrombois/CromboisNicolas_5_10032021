@@ -1,0 +1,112 @@
+.texture-paper::before
+    background: url("../img/texture-paper.png")
+    background-size: cover
+
+.bloc-bg-texture::before
+    content: ""
+    background-size: 2px 2px
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+
+$background-color: #f3e9f1
+$secundary-color: #8f5bfe
+$primary-color: #e58a0a
+
+    
+@import "./layout/header.sass"
+@import "./layout/footer.sass"
+
+#bannerShop
+    color: white
+    text-align: center
+    height: 200px
+    background-image: url("../img/photo-1540959733332-eab4deabeeaf.webp")
+    background-size: cover
+    background-position: 50% 56%
+    background-repeat: no-repeat
+    background-color: #B3B3B3
+    position: relative
+    & .row
+        position: relative
+        margin: auto
+        padding-top: 13.5px
+        & .titleShop
+            margin: auto
+            top: 40px
+            & #titleContainer
+                font-size: 32px
+                display: inline-flex
+                font-family: OpenSans-Semibold
+                margin: 20px 0 0 0
+            & h1
+                font-size: 42px
+                display: inline-flex
+                font-family: OpenSans-Bold
+#main 
+    min-height: 54vh
+    & span 
+        width: 35%
+        font-weight: 700
+    & .card-list
+        & .product-globalProduct
+            margin-top: 35px
+            position: relative
+            display: flex
+            flex-wrap: wrap
+            width: 100%
+            padding: 15px
+            border-radius: 10px
+            box-shadow: 0px 0px 10px lighten(black, 45%)
+            & .product-name
+                margin-bottom: 15px
+                width: 100%
+            & .product-img
+                width: 20%
+                border-radius: 5px
+                background-size: cover
+            & .product-information
+                width: 65%
+                display: flex
+                flex-wrap: wrap
+                & .customText
+                    margin-right: 7px
+                    width: 35%
+                    text-align: right
+                & .product-ContainerPrice
+                    width: 35%
+                    text-align: right
+                    margin-right: 7px
+            & .delete-product
+                font-size: 32px
+                color: red
+                position: absolute
+                top: calc( 50% - 31px) 
+                right: 30px
+    & #total-price
+        font-size: 22px
+        margin-top: 75px
+        padding: 25px 0 35px 0
+        position: relative
+        &::before
+            content: ""
+            display: block
+            width: 90%
+            height: 2px
+            background: darken($primary-color, 10%)
+            top: -20px
+            left: 5%
+            position: absolute
+        & .textPrice
+            color: darken($primary-color, 10%)
+            text-align: right
+            margin-right: 65px
+            & span
+                color: black
+@media screen and (min-width: 768px)
+#main
+    & .product-globalProduct
+        & .product-img 
+            width: 20%

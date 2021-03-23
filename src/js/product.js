@@ -1,51 +1,116 @@
-/*sessionStorage.removeItem('basket')*/
-for (let i=0;i< sessionStorage.length ; i++){
-    const key = sessionStorage.key(1);
-    console.log(`${key} => ${sessionStorage.getItem(key)}`)
-}
-// Fonction permettant de mettre à jour le prix de la page product.html en fonction de la quantité sélectionné
-function calculatePrice(){
-    let quantity = document.querySelector('.product-input-quantity').value;
-    //var price = JSON.parse(sessionStorage.getItem('element')).price;
-    // Faire un call a l'api plutot que de stocker dans sessionStorage
-    if (typeof(parseInt(quantity)) == "number" && parseInt(quantity)>0){
-        document.querySelector("span.product-price").innerHTML = ((price)*parseInt(quantity)/100).toFixed(2)+"€";
-    } else {
-        document.querySelector("span.product-price").innerHTML = ((price)*1/100).toFixed(2)+"€";
-    }
-}
-
-function addBasket(){
-    const specificity = $("input[type='radio'][name='color']:checked").prop("id")
-    if (specificity != undefined){
-        let quantity = document.querySelector('.product-input-quantity').value;
-        if (typeof(parseInt(quantity)) != "number" || quantity == "" || parseInt(quantity)<1 ) {
-            quantity = "1"
-        }
-        if(sessionStorage.getItem('basket') == null){
-            var basket = [];
-            var product = {"id": JSON.parse(sessionStorage.getItem('element'))._id, "custom": specificity, "quantity": quantity};
-            basket.push(product);
-            sessionStorage.setItem('basket', JSON.stringify(basket));
-        } else {
-            var product = {"id": JSON.parse(sessionStorage.getItem('element'))._id, "custom": specificity, "quantity": quantity};
-            var basket = JSON.parse(sessionStorage.getItem('basket'));
-            console.log($("input[type='radio'][name='color']:checked").prop("id"));
-            basket.push(product);
-            sessionStorage.setItem('basket', JSON.stringify(basket));
-        }
-        /* Ajouter un message d'ajout */
-    }else{
-        sessionStorage.setItem('flash', JSON.stringify({'error': "Aucunes personnalisation n'a été sélectionné"}));
-        /* Ajouter un message d'erreur */
-    }
-}
-
 // Récuperer les paramètres présents dans l'URL
 const queryString = window.location.search;
 const urlParameters = new URLSearchParams(queryString);
 const category = urlParameters.get('category');
 const id = urlParameters.get('id');
+
+
+/*localStorage.removeItem('basket')*/
+for (let i=0; i< localStorage.length; i++){
+    const key = localStorage.key(1);
+    console.log(`${key} => ${localStorage.getItem(key)}`)
+}
+
+// Fonction permettant de mettre à jour le prix de la page product.html en fonction de la quantité sélectionné
+function calculatePrice(){
+    let quantity = document.querySelector('.product-input-quantity').value;
+    //var price = JSON.parse(localStorage.getItem('element')).price;
+    
+    fetch('http://localhost:3000/api/'+category+'/'+id)
+        .then(element => element.json())
+        .then(function(data){
+            let price = data.price;
+            if (typeof(parseInt(quantity)) == "number" && parseInt(quantity)>0){
+                document.querySelector("span.product-price").innerHTML = ((price)*quantity/100).toFixed(2)+"€";
+            } else {
+                document.querySelector("span.product-price").innerHTML = ((price)*1/100).toFixed(2)+"€";
+            }
+        })
+
+}
+
+
+function addBasket(){
+    const specificity = $("input[type='radio'][name='custom']:checked").prop("id")
+    if (specificity != undefined){
+        var quantity = parseInt(document.querySelector('.product-input-quantity').value);
+
+        if (Number.isNaN(quantity) || quantity == "" || quantity<1) {
+            quantity = 1
+        }
+        if(localStorage.getItem('basket') == null){
+            var basket = [];
+            var product = {"id": JSON.parse(localStorage.getItem('element'))._id, "category" : category, "custom": specificity, "quantity": quantity};
+            basket.push(product);
+            localStorage.setItem('basket', JSON.stringify(basket));
+        } else {
+            var basket =  JSON.parse(localStorage.getItem('basket'));
+            var indexElement = 0
+            basket.forEach(element => {
+                if(element.id == id && element.custom == specificity){
+                    quantity = quantity + element['quantity'];
+                    console.log(element);
+                    console.log(basket);
+                    basket = basket.splice(indexElement, 1)
+                    console.log(basket);
+                }else{
+                    console.log('non');
+                }
+                indexElement ++;
+            })
+            var product = {"id": JSON.parse(localStorage.getItem('element'))._id, "category" : category, "custom": specificity, "quantity": quantity};
+            var basket = JSON.parse(localStorage.getItem('basket'));
+            basket.push(product);
+            localStorage.setItem('basket', JSON.stringify(basket));
+        }
+        if(document.querySelectorAll('p.alert').length == 0){
+            var alertMsg = document.createElement('p');
+            alertMsg.classList.add("alert");
+            alertMsg.classList.add('alert-success');
+            if (quantity == 1) {
+                alertMsg.innerHTML = "L'article a bien été ajouté à votre panier.";
+            } else {
+                alertMsg.innerHTML = "Les articles ont bien été ajoutés à votre panier.";
+            }
+            alertMsg.innerHTML = "L'article a bien été ajouté à votre panier.";
+            var priceElement = $('p.product-ContainerPrice');
+            priceElement.after(alertMsg);
+        }else{
+            element = document.querySelector('p.alert');
+            if (quantity == 1) {
+                element.innerHTML = "L'article a bien été ajouté à votre panier.";
+            } else {
+                element.innerHTML = "Les articles ont bien été ajoutés à votre panier.";
+            }
+            if(element.classList.contains("alert-danger")){
+                element.classList.remove("alert-danger");
+                element.classList.add("alert-success");
+                element.innerHTML = "L'article a bien été ajouté à votre panier.";
+            }
+        }
+    }else{
+        if(document.querySelectorAll('p.alert').length == 0){
+            var alertMsg = document.createElement('p');
+            alertMsg.classList.add("alert");
+            alertMsg.classList.add("alert-danger");
+            alertMsg.innerHTML = "Aucune personnalisation n'a été sélectionné";
+            var priceElement = $('p.product-ContainerPrice');
+            priceElement.after(alertMsg);
+        }else{
+            element = document.querySelector('p.alert');
+            if(element.classList.contains("alert-danger")){
+                element.innerHTML = "Aucune personnalisation n'a été sélectionné"
+            }else if(element.classList.contains('alert-success')){
+                element.classList.remove("alert-success");
+                element.classList.add("alert-danger");
+                element.innerHTML = "Aucune personnalisation n'a été sélectionné";
+            }
+        }
+
+        /* Ajouter un message d'erreur */
+    }
+}
+
 
 // Créer un tableau regroupant les adresses API (les adresses qui récupérent l'ensemble des tableaux des produits de la catégorie)
 let allItemsUrl = {"cameras": "http://localhost:3000/api/cameras/", "teddies": "http://localhost:3000/api/teddies/", "furniture" : "http://localhost:3000/api/furniture/"};
@@ -56,7 +121,7 @@ var request = new XMLHttpRequest();
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
         var element = JSON.parse(this.responseText);
-        sessionStorage.setItem('element', JSON.stringify(element));
+        localStorage.setItem('element', JSON.stringify(element));
         // Récupérer l'élément dans lequel les informations poussé
         const productDiv = document.getElementById('product');
 
@@ -66,7 +131,6 @@ request.onreadystatechange = function() {
         var divImage = document.createElement('div');
         var productGlobalForm = document.createElement('div');
         var customSentence = document.createElement('p');
-        var button = document.createElement('button');
         var button = document.createElement('button');
         var containerPrice = document.createElement('p');
         var labelQuantity = document.createElement('label');
@@ -139,7 +203,7 @@ request.onreadystatechange = function() {
             label.classList.add("form-check-label");
             // Ajoût des paramètres sur l'élément input
             input.type = "radio";
-            input.name = "color";
+            input.name = "custom";
             // Ajoût des paramètres et du texte nécessaire sur les éléments input et label
             input.id = customElement;
             label.htmlFor = customElement;
