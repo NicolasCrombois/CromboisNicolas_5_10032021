@@ -29,7 +29,7 @@
 								CATALOGUE
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" id="basket">
 							<a href="#" class="nav-link">
 								PANIER
 								<i class="fas fa-shopping-basket"></i>
@@ -56,6 +56,20 @@
             <div id="total-price">
                 
             </div>
+			<div id="user-form">
+				<p>Afin que l'envoi et le suivis se passe dans les meilleurs conditions, il est nécessaire de remplir les champs ci-dessous.</p>
+				<label for="firstName">Votre prénom : </label>
+				<input type="text" id="firstName">
+				<label for="lastName">Votre nom : </label>
+				<input type="text" id="lastName">
+				<label for="address">Votre adresse postale : </label>
+				<input type="text" id="address">
+				<label for="city">Votre ville : </label>
+				<input type="text" id="city">
+				<label for="email">Votre e-mail : </label>
+				<input type="mail" id="email">
+				<button onclick="valideBasket()">Valider la commande</button>
+			</div>
 		</div>
 
 
@@ -68,6 +82,7 @@
 		<script src="https://kit.fontawesome.com/1946d7ed35.js" crossorigin="anonymous"></script>
 
 		<!-- add local js script -->
+		<script src="src/js/articleBasket.js"></script>
 		<script src="src/js/basket.js"></script>
 		<footer>
 			<p class="text-center">Orinoco - 2021</p>

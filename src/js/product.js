@@ -4,8 +4,6 @@ const urlParameters = new URLSearchParams(queryString);
 const category = urlParameters.get('category');
 const id = urlParameters.get('id');
 
-
-/*localStorage.removeItem('basket')*/
 for (let i=0; i< localStorage.length; i++){
     const key = localStorage.key(1);
     console.log(`${key} => ${localStorage.getItem(key)}`)
@@ -14,55 +12,47 @@ for (let i=0; i< localStorage.length; i++){
 // Fonction permettant de mettre à jour le prix de la page product.html en fonction de la quantité sélectionné
 function calculatePrice(){
     let quantity = document.querySelector('.product-input-quantity').value;
-    //var price = JSON.parse(localStorage.getItem('element')).price;
     
     fetch('http://localhost:3000/api/'+category+'/'+id)
         .then(element => element.json())
         .then(function(data){
             let price = data.price;
-            if (typeof(parseInt(quantity)) == "number" && parseInt(quantity)>0){
+            if (parseInt(quantity)>0){
                 document.querySelector("span.product-price").innerHTML = ((price)*quantity/100).toFixed(2)+"€";
             } else {
-                document.querySelector("span.product-price").innerHTML = ((price)*1/100).toFixed(2)+"€";
+                document.querySelector("span.product-price").innerHTML = ((price)/100).toFixed(2)+"€";
             }
         })
 
 }
 
-
-function addBasket(){
+//Fonction permettant d'ajouté un élèment dans le panier
+function addBasket(element){
+    // on récupére la personnalisation sélectionné
     const specificity = $("input[type='radio'][name='custom']:checked").prop("id")
+    // On  vérifie une personnalisation a bien été choisie
     if (specificity != undefined){
         var quantity = parseInt(document.querySelector('.product-input-quantity').value);
-
-        if (Number.isNaN(quantity) || quantity == "" || quantity<1) {
+        // Si une personnalisation a été chosie, on vérifie que la quantité à été sélectionnée si ce n'est pas le cas quantity =  1
+        if (Number.isNaN(quantity) || quantity<1) {
             quantity = 1
         }
-        if(localStorage.getItem('basket') == null){
-            var basket = [];
-            var product = {"id": JSON.parse(localStorage.getItem('element'))._id, "category" : category, "custom": specificity, "quantity": quantity};
-            basket.push(product);
-            localStorage.setItem('basket', JSON.stringify(basket));
-        } else {
-            var basket =  JSON.parse(localStorage.getItem('basket'));
-            var indexElement = 0
-            basket.forEach(element => {
-                if(element.id == id && element.custom == specificity){
-                    quantity = quantity + element['quantity'];
-                    console.log(element);
-                    console.log(basket);
-                    basket = basket.splice(indexElement, 1)
-                    console.log(basket);
-                }else{
-                    console.log('non');
-                }
-                indexElement ++;
-            })
-            var product = {"id": JSON.parse(localStorage.getItem('element'))._id, "category" : category, "custom": specificity, "quantity": quantity};
-            var basket = JSON.parse(localStorage.getItem('basket'));
-            basket.push(product);
-            localStorage.setItem('basket', JSON.stringify(basket));
+
+        // On verifie que ce produit avec cette personnalisation n'est pas déjà présent dans le panier
+        // S'il y est déjà, on ajouter la quantité sélectionné à l'élèment déjà présent dans le panier
+        // Sinon on ajoute simplement le produit
+        var product = {"id": element._id, "category" : category, "custom": specificity, "quantity": quantity};
+        var basket = JSON.parse(localStorage.getItem('basket')) || []
+        const sameElement = basket.filter(element => element.id == id && element.custom == specificity)
+        if(sameElement.length == 1){
+            sameElement[0].quantity += quantity ;
+        }else{
+        basket.push(product);
         }
+        // On met à jour le panier présent dans le stockage local
+        localStorage.setItem('basket', JSON.stringify(basket));
+
+        // Enfin on formate et affiche le message adéquat
         if(document.querySelectorAll('p.alert').length == 0){
             var alertMsg = document.createElement('p');
             alertMsg.classList.add("alert");
@@ -106,22 +96,22 @@ function addBasket(){
                 element.innerHTML = "Aucune personnalisation n'a été sélectionné";
             }
         }
-
-        /* Ajouter un message d'erreur */
     }
 }
 
+numberArticleBasket()
 
 // Créer un tableau regroupant les adresses API (les adresses qui récupérent l'ensemble des tableaux des produits de la catégorie)
 let allItemsUrl = {"cameras": "http://localhost:3000/api/cameras/", "teddies": "http://localhost:3000/api/teddies/", "furniture" : "http://localhost:3000/api/furniture/"};
+// Tableaux référencant les personnalisations possibles en fonctions des catégories des produits.
 let customByCategory = {"cameras" : "lenses", "teddies" : "colors", "furniture" : "varnish"};
 
-// Requête XML de récupérer toutes les données relatives au produit sélectionné
+// Requête XML afin de récupérer toutes les données relatives au produit sélectionné
 var request = new XMLHttpRequest();
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
         var element = JSON.parse(this.responseText);
-        localStorage.setItem('element', JSON.stringify(element));
+
         // Récupérer l'élément dans lequel les informations poussé
         const productDiv = document.getElementById('product');
 
@@ -184,7 +174,7 @@ request.onreadystatechange = function() {
         inputQuantity.addEventListener("mouseup", calculatePrice, false);
 
         // Ajoût d'une écoute sur le bouton "ajouter au panier" afin d'exécuter la fonction d'ajouter au basket 
-        button.addEventListener("click", addBasket, false);
+        button.addEventListener("click", function(){ addBasket(element)}, false);
 
         // Ensemble des éléments sont enfin ajoutés dans l'élément parent
         productDiv.appendChild(h1);

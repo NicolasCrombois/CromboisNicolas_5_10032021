@@ -77,6 +77,6 @@ function selectCategoryProduct(){
     displayProduct(arrayApiUrlCategorySelected)
 }
 
-
+numberArticleBasket()
 let allItemsUrl = ["http://localhost:3000/api/cameras/", "http://localhost:3000/api/teddies/", "http://localhost:3000/api/furniture/"];
 displayProduct(allItemsUrl)

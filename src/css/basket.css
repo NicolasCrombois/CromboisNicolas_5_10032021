@@ -54,6 +54,13 @@ header {
           header .navbar #navbarContent ul li a:hover {
             text-shadow: 1.5px 1.5px 0px rgba(143, 91, 254, 0.5);
             transition: color 0.4s, text-shadow 0.2s; }
+          header .navbar #navbarContent ul li a p {
+            display: inline-block;
+            font-size: 0.8rem;
+            border: 1px solid #474747;
+            border-radius: 25px;
+            padding: 3.5px;
+            margin-bottom: 0; }
 
 @media (min-width: 768px) {
   header .navbar #navbarContent {
@@ -103,40 +110,53 @@ footer {
   #main span {
     width: 35%;
     font-weight: 700; }
-  #main .card-list .product-globalProduct {
-    margin-top: 35px;
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px #737373; }
-    #main .card-list .product-globalProduct .product-name {
-      margin-bottom: 15px;
-      width: 100%; }
-    #main .card-list .product-globalProduct .product-img {
-      width: 20%;
-      border-radius: 5px;
-      background-size: cover; }
-    #main .card-list .product-globalProduct .product-information {
-      width: 65%;
+  #main .card-list {
+    margin-top: 35px; }
+    #main .card-list .product-globalProduct {
+      margin-top: 0;
+      position: relative;
       display: flex;
-      flex-wrap: wrap; }
-      #main .card-list .product-globalProduct .product-information .customText {
-        margin-right: 7px;
-        width: 35%;
-        text-align: right; }
-      #main .card-list .product-globalProduct .product-information .product-ContainerPrice {
-        width: 35%;
-        text-align: right;
-        margin-right: 7px; }
-    #main .card-list .product-globalProduct .delete-product {
-      font-size: 32px;
-      color: red;
-      position: absolute;
-      top: calc( 50% - 31px);
-      right: 30px; }
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 15px;
+      box-shadow: 0px 0px 1px #737373; }
+      #main .card-list .product-globalProduct .product-name {
+        margin-bottom: 15px;
+        width: 88%;
+        text-align: center; }
+      #main .card-list .product-globalProduct .product-img {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 5px;
+        background-size: cover;
+        object-fit: cover;
+        max-height: 180px;
+        margin: auto;
+        margin-bottom: 20px; }
+      #main .card-list .product-globalProduct .product-information {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 14px; }
+        #main .card-list .product-globalProduct .product-information span {
+          width: 42%; }
+        #main .card-list .product-globalProduct .product-information .customText {
+          margin-right: 7px;
+          width: 54%;
+          text-align: right; }
+        #main .card-list .product-globalProduct .product-information .product-ContainerPrice {
+          width: 54%;
+          text-align: right;
+          margin-right: 7px; }
+      #main .card-list .product-globalProduct .delete-product {
+        font-size: 32px;
+        color: red;
+        position: absolute;
+        top: 5px;
+        right: 5px; }
+    #main .card-list .alert {
+      margin: auto;
+      margin-top: 20vh; }
   #main #total-price {
     font-size: 22px;
     margin-top: 75px;
@@ -157,8 +177,109 @@ footer {
       margin-right: 65px; }
       #main #total-price .textPrice span {
         color: black; }
+  #main #user-form {
+    text-align: center; }
+    #main #user-form p {
+      padding: 40px 0 20px 0; }
+    #main #user-form input {
+      width: 46%;
+      display: inline-block;
+      background-color: #ececec;
+      padding: 5px 20px;
+      font-size: 16px;
+      border: 2px solid #a5a5a5;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      margin-right: 4%; }
+    #main #user-form label {
+      width: 44%;
+      text-align: right;
+      padding-right: 10px;
+      margin-bottom: 10px; }
+    #main #user-form button {
+      text-align: center;
+      margin-top: 15px;
+      height: 53px;
+      font-size: 18px;
+      color: white;
+      border: 0;
+      border-radius: 25px;
+      padding: 0px 25px;
+      background-image: linear-gradient(#b28efe, #8f5bfe);
+      box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.4);
+      transition: box-shadow 0.4s, background 0.4s; }
+      #main #user-form button:hover {
+        background-image: linear-gradient(#c3a7fe, #a074fe);
+        box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.8); }
+    #main #user-form .alert {
+      width: 60%;
+      padding: 15px 0;
+      margin: 20px auto; }
+  #main h2.congratulationSentence {
+    margin: 60px 0 30px 0;
+    font-size: 20px; }
+  #main p.finalTotalPrice {
+    font-size: 18px; }
+  #main .unit-order {
+    background-color: #ddffd6;
+    border-radius: 15px;
+    padding: 15px 45px;
+    margin-top: 25px;
+    box-shadow: 0px 0px 6px #737373; }
+    #main .unit-order h3 {
+      font-size: 20px; }
 
-#main .product-globalProduct .product-img {
-  width: 20%; }
+@media screen and (min-width: 575px) {
+  #main .card-list {
+    margin-top: 0; }
+    #main .card-list .product-globalProduct {
+      margin-top: 35px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #737373; }
+      #main .card-list .product-globalProduct .product-name {
+        width: 100%;
+        margin-bottom: 25px; }
+      #main .card-list .product-globalProduct .product-information {
+        width: 100%;
+        font-size: 16px; }
+        #main .card-list .product-globalProduct .product-information span {
+          width: 36%; }
+        #main .card-list .product-globalProduct .product-information .customText {
+          width: 55%; }
+        #main .card-list .product-globalProduct .product-information .product-ContainerPrice {
+          width: 55%; }
+  #main h2.congratulationSentence {
+    font-size: 24px; } }
+@media screen and (min-width: 768px) {
+  #main .card-list .product-globalProduct .product-img {
+    width: 30%;
+    max-height: 210px; }
+  #main .card-list .product-globalProduct .product-information {
+    width: 65%; }
+    #main .card-list .product-globalProduct .product-information span {
+      width: 50%; }
+    #main .card-list .product-globalProduct .product-information .customText {
+      width: 45%; }
+    #main .card-list .product-globalProduct .product-information .product-ContainerPrice {
+      width: 45%; }
+  #main .card-list .product-globalProduct .delete-product {
+    top: calc( 50% - 31px);
+    right: 30px; }
+  #main h2.congratulationSentence {
+    margin: 60px 0 30px 30px; }
+  #main p.finalTotalPrice {
+    margin-left: 30px; }
+  #main #user-form {
+    text-align: center; }
+    #main #user-form p {
+      padding: 40px 0 20px 0; }
+    #main #user-form input {
+      width: 45%;
+      margin-right: 20%; }
+    #main #user-form label {
+      width: 25%;
+      text-align: right;
+      padding-right: 10px;
+      margin-bottom: 10px; } }
 
 /*# sourceMappingURL=basket.css.map */
