@@ -4,56 +4,56 @@ const urlParameters = new URLSearchParams(queryString);
 const category = urlParameters.get('category');
 const id = urlParameters.get('id');
 
-for (let i=0; i< localStorage.length; i++){
+for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(1);
     console.log(`${key} => ${localStorage.getItem(key)}`)
 }
 
 // Fonction permettant de mettre à jour le prix de la page product.html en fonction de la quantité sélectionné
-function calculatePrice(){
+function calculatePrice() {
     let quantity = document.querySelector('.product-input-quantity').value;
-    
-    fetch('http://localhost:3000/api/'+category+'/'+id)
+
+    fetch('http://localhost:3000/api/' + category + '/' + id)
         .then(element => element.json())
-        .then(function(data){
+        .then(function (data) {
             let price = data.price;
-            if (parseInt(quantity)>0){
-                document.querySelector("span.product-price").innerHTML = ((price)*quantity/100).toFixed(2)+"€";
+            if (parseInt(quantity) > 0) {
+                document.querySelector("span.product-price").innerHTML = ((price) * quantity / 100).toFixed(2) + "€";
             } else {
-                document.querySelector("span.product-price").innerHTML = ((price)/100).toFixed(2)+"€";
+                document.querySelector("span.product-price").innerHTML = ((price) / 100).toFixed(2) + "€";
             }
         })
 
 }
 
 //Fonction permettant d'ajouté un élèment dans le panier
-function addBasket(element){
+function addBasket(element) {
     // on récupére la personnalisation sélectionné
     const specificity = $("input[type='radio'][name='custom']:checked").prop("id")
     // On  vérifie une personnalisation a bien été choisie
-    if (specificity != undefined){
+    if (specificity != undefined) {
         var quantity = parseInt(document.querySelector('.product-input-quantity').value);
         // Si une personnalisation a été chosie, on vérifie que la quantité à été sélectionnée si ce n'est pas le cas quantity =  1
-        if (Number.isNaN(quantity) || quantity<1) {
+        if (Number.isNaN(quantity) || quantity < 1) {
             quantity = 1
         }
 
         // On verifie que ce produit avec cette personnalisation n'est pas déjà présent dans le panier
         // S'il y est déjà, on ajouter la quantité sélectionné à l'élèment déjà présent dans le panier
         // Sinon on ajoute simplement le produit
-        var product = {"id": element._id, "category" : category, "custom": specificity, "quantity": quantity};
+        var product = { "id": element._id, "category": category, "custom": specificity, "quantity": quantity };
         var basket = JSON.parse(localStorage.getItem('basket')) || []
         const sameElement = basket.filter(element => element.id == id && element.custom == specificity)
-        if(sameElement.length == 1){
-            sameElement[0].quantity += quantity ;
-        }else{
-        basket.push(product);
+        if (sameElement.length == 1) {
+            sameElement[0].quantity += quantity;
+        } else {
+            basket.push(product);
         }
         // On met à jour le panier présent dans le stockage local
         localStorage.setItem('basket', JSON.stringify(basket));
 
         // Enfin on formate et affiche le message adéquat
-        if(document.querySelectorAll('p.alert').length == 0){
+        if (document.querySelectorAll('p.alert').length == 0) {
             var alertMsg = document.createElement('p');
             alertMsg.classList.add("alert");
             alertMsg.classList.add('alert-success');
@@ -65,32 +65,32 @@ function addBasket(element){
             alertMsg.innerHTML = "L'article a bien été ajouté à votre panier.";
             var priceElement = $('p.product-ContainerPrice');
             priceElement.after(alertMsg);
-        }else{
+        } else {
             element = document.querySelector('p.alert');
             if (quantity == 1) {
                 element.innerHTML = "L'article a bien été ajouté à votre panier.";
             } else {
                 element.innerHTML = "Les articles ont bien été ajoutés à votre panier.";
             }
-            if(element.classList.contains("alert-danger")){
+            if (element.classList.contains("alert-danger")) {
                 element.classList.remove("alert-danger");
                 element.classList.add("alert-success");
                 element.innerHTML = "L'article a bien été ajouté à votre panier.";
             }
         }
-    }else{
-        if(document.querySelectorAll('p.alert').length == 0){
+    } else {
+        if (document.querySelectorAll('p.alert').length == 0) {
             var alertMsg = document.createElement('p');
             alertMsg.classList.add("alert");
             alertMsg.classList.add("alert-danger");
             alertMsg.innerHTML = "Aucune personnalisation n'a été sélectionné";
             var priceElement = $('p.product-ContainerPrice');
             priceElement.after(alertMsg);
-        }else{
+        } else {
             element = document.querySelector('p.alert');
-            if(element.classList.contains("alert-danger")){
+            if (element.classList.contains("alert-danger")) {
                 element.innerHTML = "Aucune personnalisation n'a été sélectionné"
-            }else if(element.classList.contains('alert-success')){
+            } else if (element.classList.contains('alert-success')) {
                 element.classList.remove("alert-success");
                 element.classList.add("alert-danger");
                 element.innerHTML = "Aucune personnalisation n'a été sélectionné";
@@ -102,13 +102,13 @@ function addBasket(element){
 numberArticleBasket()
 
 // Créer un tableau regroupant les adresses API (les adresses qui récupérent l'ensemble des tableaux des produits de la catégorie)
-let allItemsUrl = {"cameras": "http://localhost:3000/api/cameras/", "teddies": "http://localhost:3000/api/teddies/", "furniture" : "http://localhost:3000/api/furniture/"};
+let allItemsUrl = { "cameras": "http://localhost:3000/api/cameras/", "teddies": "http://localhost:3000/api/teddies/", "furniture": "http://localhost:3000/api/furniture/" };
 // Tableaux référencant les personnalisations possibles en fonctions des catégories des produits.
-let customByCategory = {"cameras" : "lenses", "teddies" : "colors", "furniture" : "varnish"};
+let customByCategory = { "cameras": "lenses", "teddies": "colors", "furniture": "varnish" };
 
 // Requête XML afin de récupérer toutes les données relatives au produit sélectionné
 var request = new XMLHttpRequest();
-request.onreadystatechange = function() {
+request.onreadystatechange = function () {
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
         var element = JSON.parse(this.responseText);
 
@@ -127,7 +127,7 @@ request.onreadystatechange = function() {
         var inputQuantity = document.createElement('input');
         var span = document.createElement('span');
         var divGlobalCustom = document.createElement('div');
-        
+
         // Ajoût des classes à ces éléments
         h1.classList.add("product-name");
         h1.classList.add("text-center");
@@ -144,12 +144,12 @@ request.onreadystatechange = function() {
         divGlobalCustom.classList.add("product-globalCustom");
 
         // Ajoût de la balise alt spécifique 
-        if (category == "cameras"){
-            img.alt = "Photo de la caméra "+element.name;
-        } else if (category == "teddies"){
-            img.alt = "Photo de la peluche "+element.name;
-        } else if (category == "furniture"){
-            img.alt = "Photo d'un "+element.name;
+        if (category == "cameras") {
+            img.alt = "Photo de la caméra " + element.name;
+        } else if (category == "teddies") {
+            img.alt = "Photo de la peluche " + element.name;
+        } else if (category == "furniture") {
+            img.alt = "Photo d'un " + element.name;
         }
         // Ajoût de la source de l'image
         img.src = element.imageUrl;
@@ -158,7 +158,7 @@ request.onreadystatechange = function() {
         h1.innerHTML = element.name;
         customSentence.innerHTML = "Choississez la personnalisation qui vous convient :";
         button.innerHTML = "Ajouter au panier";
-        span.innerHTML = (element.price/100).toFixed(2)+"€";
+        span.innerHTML = (element.price / 100).toFixed(2) + "€";
         containerPrice.innerHTML = "Prix : ";
         labelQuantity.innerHTML = "Quantité désirée :";
 
@@ -174,7 +174,7 @@ request.onreadystatechange = function() {
         inputQuantity.addEventListener("mouseup", calculatePrice, false);
 
         // Ajoût d'une écoute sur le bouton "ajouter au panier" afin d'exécuter la fonction d'ajouter au basket 
-        button.addEventListener("click", function(){ addBasket(element)}, false);
+        button.addEventListener("click", function () { addBasket(element) }, false);
 
         // Ensemble des éléments sont enfin ajoutés dans l'élément parent
         productDiv.appendChild(h1);
@@ -212,6 +212,7 @@ request.onreadystatechange = function() {
         productDiv.appendChild(containerPrice);
         productDiv.appendChild(button);
 
-}}
-request.open("GET", allItemsUrl[category]+id);
+    }
+}
+request.open("GET", allItemsUrl[category] + id);
 request.send();

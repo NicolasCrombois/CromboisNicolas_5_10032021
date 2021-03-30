@@ -2,27 +2,28 @@ let basket = JSON.parse(localStorage.getItem('basket'));
 let index = 0;
 const TotalPrice = document.getElementById('total-price');
 
-async function postOrder(category, id_list, firstName, lastName, city, address, email){
-    const response = await fetch('http://localhost:3000/api/'+category+'/order', {
+function postOrder(category, id_list, firstName, lastName, city, address, email) {
+    fetch('http://localhost:3000/api/' + category + '/order', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(
             {
-                contact: {"firstName": firstName, "lastName": lastName, "address": address, "city": city, "email": email},
+                contact: { "firstName": firstName, "lastName": lastName, "address": address, "city": city, "email": email },
                 products: id_list
             }),
-    });
-    return response.json();
+    })
+        .then(response => response.json())
+        .then(data => displayOrder(data));
 }
-function clearViewBasket(){
+function clearViewBasket() {
     const basketElement = document.querySelectorAll('.product-globalProduct')
     basketElement.forEach(element => {
         element.remove()
     });
 }
-function basketEmpty(){
+function basketEmpty() {
     document.querySelector('#total-price').remove()
     document.querySelector('#user-form').remove()
     var alert = document.createElement('p');
@@ -32,13 +33,13 @@ function basketEmpty(){
     alert.innerHTML = "Votre panier est vide. <br> Pour passer au paiement d'un produit, ajoutez-le d'abord dans votre panier puis revenez sur cette page.";
     (document.querySelector(".card-list")).appendChild(alert)
 }
-function viewProduct(basket, index, totalPriceFloat){
+function viewProduct(basket, index, totalPriceFloat) {
     basket.forEach(article => {
         var request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
+        request.onreadystatechange = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 var element = JSON.parse(this.responseText);
-                totalPriceFloat += element.price*article.quantity;
+                totalPriceFloat += element.price * article.quantity;
                 // Récupérer l'élément dans lequel les informations poussé
                 const productDiv = document.querySelector('#main div.card-list');
 
@@ -56,7 +57,7 @@ function viewProduct(basket, index, totalPriceFloat){
                 var divGlobalProduct = document.createElement('div');
                 var textPrice = document.createElement('p');
                 var totalPrice = document.createElement('span');
-                
+
                 // Ajoût des classes à ces éléments
                 h1.classList.add("product-name");
                 img.classList.add("product-img");
@@ -74,15 +75,15 @@ function viewProduct(basket, index, totalPriceFloat){
 
                 //Ajout de la fonction à executer  sur le bouton de suppression
                 const indexArticle = index
-                deleteButton.onclick = function(){ deleteProduct(basket, indexArticle); };
-                
+                deleteButton.onclick = function () { deleteProduct(basket, indexArticle); };
+
                 // Ajoût de la balise alt spécifique 
-                if (element.category == "cameras"){
-                    img.alt = "Photo de la caméra "+element.name;
-                } else if (element.category == "teddies"){
-                    img.alt = "Photo de la peluche "+element.name;
-                } else if (element.category == "furniture"){
-                    img.alt = "Photo d'un "+element.name;
+                if (element.category == "cameras") {
+                    img.alt = "Photo de la caméra " + element.name;
+                } else if (element.category == "teddies") {
+                    img.alt = "Photo de la peluche " + element.name;
+                } else if (element.category == "furniture") {
+                    img.alt = "Photo d'un " + element.name;
                 }
                 // Ajoût de la source de l'image
                 img.src = element.imageUrl;
@@ -92,13 +93,13 @@ function viewProduct(basket, index, totalPriceFloat){
                 customSentence.innerHTML = "Personnalisation choisie :";
                 custom.innerHTML = article.custom;
                 deleteButton.innerHTML = "<i class=\"fas fa-times\"></i>";
-                price.innerHTML = (element.price/100)*article.quantity.toFixed(2)+"€";
+                price.innerHTML = (element.price / 100) * article.quantity.toFixed(2) + "€";
                 containerPrice.innerHTML = "Prix : ";
                 labelQuantity.innerHTML = "Quantité désirée : ";
                 quantity.innerHTML = article.quantity;
                 textPrice.innerHTML = "Montant total : ";
-                
-                totalPrice.innerHTML = (totalPriceFloat/100).toFixed(2)+"€";
+
+                totalPrice.innerHTML = (totalPriceFloat / 100).toFixed(2) + "€";
 
 
                 // Ajoût d'une écoute sur le bouton "ajouter au panier" afin d'exécuter la fonction d'ajouter au basket 
@@ -120,17 +121,18 @@ function viewProduct(basket, index, totalPriceFloat){
                 $('.textPrice').remove()
                 TotalPrice.appendChild(textPrice);
 
-                
-                index ++;
 
-        }}
-        request.open("GET", "http://localhost:3000/api/"+article.category+"/"+article.id);
+                index++;
+
+            }
+        }
+        request.open("GET", "http://localhost:3000/api/" + article.category + "/" + article.id);
         request.send();
 
     });
 }
 
-function displayOrder(data){
+function displayOrder(data) {
     //Afin d'afficher correctement les commandes réalisés, il faut dans un premier temps enlever les éléments présents
     $('#user-form').remove();
     $('#total-price').remove();
@@ -145,10 +147,10 @@ function displayOrder(data){
     var sentence = document.createElement('p');
     var ul = document.createElement('ul');
 
-    
+
     divOrder.classList.add("unit-order");
 
-    title.innerHTML = "Numéro de commande : "+data.orderId;
+    title.innerHTML = "Numéro de commande : " + data.orderId;
     sentence.innerHTML = 'Cette commande comprend l\'/les article(s) suivant(s):';
     divOrder.appendChild(title);
     divOrder.appendChild(sentence);
@@ -156,7 +158,7 @@ function displayOrder(data){
         var li = document.createElement('li');
         li.innerHTML = element.name;
         ul.appendChild(li);
-        
+
     });
     divOrder.appendChild(ul)
     divParent = document.getElementById('main');
@@ -164,7 +166,7 @@ function displayOrder(data){
     localStorage.removeItem('basket')
 }
 
-function deleteProduct(basket, index){
+function deleteProduct(basket, index) {
     //Pour supprimé un produit du panier, on coupe le tableau basket à l'index de ce produit
     clearViewBasket()
     basket.splice(index, 1);
@@ -175,14 +177,14 @@ function deleteProduct(basket, index){
     numberArticleBasket()
 
     // Afin le panier possède au moins un article, on affiche la basket sinon on affiche un message disant que le panier est vide
-    if(basket.length > 0){
+    if (basket.length > 0) {
         viewProduct(basket, index, 0.00)
-    }else{
+    } else {
         basketEmpty()
     }
 }
 
-function valideBasket(){
+function valideBasket() {
     const firstName = document.getElementById("firstName").value
     const lastName = document.getElementById("lastName").value
     const address = document.getElementById("address").value
@@ -194,46 +196,37 @@ function valideBasket(){
     let id_list_teddy = []
     //On vérifie ensuite que les champs du formulaire soient correctement remplis
     var formatEmail = /\S+@\S+\.\S+/;
-    if (firstName != undefined && typeof(firstName)=="string" && lastName != null && typeof(lastName)=="string" && address != null && typeof(address)=="string" && email != null && formatEmail.test(email) && city != null && typeof(city)=="string"){
+    if (firstName != undefined && typeof (firstName) == "string" && lastName != null && typeof (lastName) == "string" && address != null && typeof (address) == "string" && email != null && formatEmail.test(email) && city != null && typeof (city) == "string") {
         basket.forEach(element => {
-            if(element.category =="cameras"){
+            if (element.category == "cameras") {
                 id_list_camera.push(element.id)
-            }else if (element.category =="furniture") {
+            } else if (element.category == "furniture") {
                 id_list_furniture.push(element.id)
-            } else if (element.category =="teddies") {
+            } else if (element.category == "teddies") {
                 id_list_teddy.push(element.id)
-            }        
+            }
         });
-        if(id_list_camera.length != 0 || id_list_teddy.length != 0 || id_list_furniture.length != 0 ){
+        if (id_list_camera.length != 0 || id_list_teddy.length != 0 || id_list_furniture.length != 0) {
             var congratulationSentence = document.createElement('h2');
             var totalPriceSentence = document.createElement('p');
-            
+
             congratulationSentence.classList.add("congratulationSentence");
             totalPriceSentence.classList.add("finalTotalPrice");
-            congratulationSentence.innerHTML = "Félicitation "+firstName+" "+lastName+" votre commande a bien été effectué ! ";
-            totalPriceSentence.innerHTML = "Le prix global de vos commandes est de : <b>"+document.querySelector('.totalPrice').innerHTML;
+            congratulationSentence.innerHTML = "Félicitation " + firstName + " " + lastName + " votre commande a bien été effectué ! ";
+            totalPriceSentence.innerHTML = "Le prix global de vos commandes est de : <b>" + document.querySelector('.totalPrice').innerHTML;
             document.getElementById('main').appendChild(congratulationSentence);
             document.getElementById('main').appendChild(totalPriceSentence);
         }
-        if(id_list_camera.length != 0){
+        if (id_list_camera.length != 0) {
             postOrder("cameras", id_list_camera, firstName, lastName, city, address, email)
-            .then(data => {
-                displayOrder(data)
-            })
-        }if (id_list_furniture.length != 0){
+        } if (id_list_furniture.length != 0) {
             postOrder("furniture", id_list_furniture, firstName, lastName, city, address, email)
-            .then(data => {
-                displayOrder(data)
-            })
-        }if (id_list_teddy.length != 0){
+        } if (id_list_teddy.length != 0) {
             postOrder("teddies", id_list_teddy, firstName, lastName, city, address, email)
-            .then(data => {
-                displayOrder(data)
-            })
         }
 
-    }else{
-        if(document.querySelector('#user-form .alert')){
+    } else {
+        if (document.querySelector('#user-form .alert')) {
             document.querySelector('#user-form .alert').remove()
         }
         var alert = document.createElement('p');
@@ -246,8 +239,8 @@ function valideBasket(){
 }
 
 numberArticleBasket()
-if(basket == null || basket.length == 0){
+if (basket == null || basket.length == 0) {
     basketEmpty()
-}else{
+} else {
     viewProduct(basket, index, 0.00)
 }
