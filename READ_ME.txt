@@ -4,6 +4,7 @@ Pour cela, NodeJs doit être installé sur la machine.
 Au préalable cloner le repository Git sur votre machine.
 Un fois cela fait, exécuter votre Terminal puis faites : 
 ->   cd path_du_projet/api/
+->   npm install
 ->   node server
 
 Maintenant votre terminal devrait vous afficher le message de réussite suivant:
