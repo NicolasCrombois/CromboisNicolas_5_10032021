@@ -1,9 +1,8 @@
 let basket = JSON.parse(localStorage.getItem('basket'));
-let index = 0;
 const TotalPrice = document.getElementById('total-price');
-
+//Permet de faire la requête post d'une commande et de récupérer la réponse de celle-ci
 function postOrder(category, id_list, firstName, lastName, city, address, email) {
-    fetch('http://localhost:3000/api/' + category + '/order', {
+    fetch(host+'api/' + category + '/order', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -16,13 +15,13 @@ function postOrder(category, id_list, firstName, lastName, city, address, email)
     })
         .then(response => response.json())
         .then(data => displayOrder(data));
-}
+}//Permet de supprimer les éléments du panier affichés sur la page 
 function clearViewBasket() {
     const basketElement = document.querySelectorAll('.product-globalProduct')
     basketElement.forEach(element => {
         element.remove()
     });
-}
+}//Permet d'afficher le message signalant à l'utilisateur que son panier  est vide.
 function basketEmpty() {
     document.querySelector('#total-price').remove()
     document.querySelector('#user-form').remove()
@@ -33,7 +32,7 @@ function basketEmpty() {
     alert.innerHTML = "Votre panier est vide. <br> Pour passer au paiement d'un produit, ajoutez-le d'abord dans votre panier puis revenez sur cette page.";
     (document.querySelector(".card-list")).appendChild(alert)
 }
-function viewProduct(basket, index, totalPriceFloat) {
+function viewProduct(basket, totalPriceFloat) {
     basket.forEach(article => {
         var request = new XMLHttpRequest();
         request.onreadystatechange = function () {
@@ -74,8 +73,8 @@ function viewProduct(basket, index, totalPriceFloat) {
                 totalPrice.classList.add("totalPrice");
 
                 //Ajout de la fonction à executer  sur le bouton de suppression
-                const indexArticle = index
-                deleteButton.onclick = function () { deleteProduct(basket, indexArticle); };
+                console.log(article.id + " - " + article.category)
+                deleteButton.onclick = function () { deleteProduct(basket, article.id, article.category, article.custom); };
 
                 // Ajoût de la balise alt spécifique 
                 if (element.category == "cameras") {
@@ -101,10 +100,6 @@ function viewProduct(basket, index, totalPriceFloat) {
 
                 totalPrice.innerHTML = (totalPriceFloat / 100).toFixed(2) + "€";
 
-
-                // Ajoût d'une écoute sur le bouton "ajouter au panier" afin d'exécuter la fonction d'ajouter au basket 
-                //deleteButton.addEventListener("click", addBasket, false);
-
                 // Ensemble des éléments sont enfin ajoutés dans l'élément parent
                 divGlobalProduct.appendChild(h1);
                 divGlobalProduct.appendChild(img);
@@ -121,12 +116,9 @@ function viewProduct(basket, index, totalPriceFloat) {
                 $('.textPrice').remove()
                 TotalPrice.appendChild(textPrice);
 
-
-                index++;
-
             }
         }
-        request.open("GET", "http://localhost:3000/api/" + article.category + "/" + article.id);
+        request.open("GET", host + "api/" + article.category + "/" + article.id);
         request.send();
 
     });
@@ -166,25 +158,26 @@ function displayOrder(data) {
     localStorage.removeItem('basket')
 }
 
-function deleteProduct(basket, index) {
+function deleteProduct(basket, id, category, custom) {
     //Pour supprimé un produit du panier, on coupe le tableau basket à l'index de ce produit
     clearViewBasket()
-    basket.splice(index, 1);
-    localStorage.setItem('basket', JSON.stringify(basket));
-    index = 0
-
-    document.querySelector('.nav-item#basket p').remove()
-    numberArticleBasket()
-
+    for (let i = 0; i < basket.length; i++) {
+        if (basket[i].id == id && basket[i].category == category && basket[i].custom == custom){
+            basket.splice(i, 1);
+            localStorage.setItem('basket', JSON.stringify(basket));
+            document.querySelector('.nav-item#basket p').remove()
+            numberArticleBasket()
+        }
+    }
     // Afin le panier possède au moins un article, on affiche la basket sinon on affiche un message disant que le panier est vide
     if (basket.length > 0) {
-        viewProduct(basket, index, 0.00)
+        viewProduct(basket, 0.00)
     } else {
         basketEmpty()
     }
 }
 
-function valideBasket() {
+function valideContact() {
     const firstName = document.getElementById("firstName").value
     const lastName = document.getElementById("lastName").value
     const address = document.getElementById("address").value
@@ -197,6 +190,8 @@ function valideBasket() {
     //On vérifie ensuite que les champs du formulaire soient correctement remplis
     var formatEmail = /\S+@\S+\.\S+/;
     if (firstName != undefined && typeof (firstName) == "string" && lastName != null && typeof (lastName) == "string" && address != null && typeof (address) == "string" && email != null && formatEmail.test(email) && city != null && typeof (city) == "string") {
+        //On trie les produits du panier par catégorie via des tableaux
+        //Car l'api réalise des commandes par catégories et non pas sur un panier 
         basket.forEach(element => {
             if (element.category == "cameras") {
                 id_list_camera.push(element.id)
@@ -206,6 +201,7 @@ function valideBasket() {
                 id_list_teddy.push(element.id)
             }
         });
+        //On réalise ensuite l'affichage des informations de la commande
         if (id_list_camera.length != 0 || id_list_teddy.length != 0 || id_list_furniture.length != 0) {
             var congratulationSentence = document.createElement('h2');
             var totalPriceSentence = document.createElement('p');
@@ -236,11 +232,12 @@ function valideBasket() {
         alert.innerHTML = "Certains champs ne sont pas remplis correctement.";
         (document.querySelector("#user-form button")).before(alert)
     }
+    numberArticleBasket()
 }
 
 numberArticleBasket()
 if (basket == null || basket.length == 0) {
     basketEmpty()
 } else {
-    viewProduct(basket, index, 0.00)
+    viewProduct(basket, 0.00)
 }

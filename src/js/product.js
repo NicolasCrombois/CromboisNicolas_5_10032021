@@ -4,16 +4,11 @@ const urlParameters = new URLSearchParams(queryString);
 const category = urlParameters.get('category');
 const id = urlParameters.get('id');
 
-for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(1);
-    console.log(`${key} => ${localStorage.getItem(key)}`)
-}
-
 // Fonction permettant de mettre à jour le prix de la page product.html en fonction de la quantité sélectionné
 function calculatePrice() {
     let quantity = document.querySelector('.product-input-quantity').value;
 
-    fetch('http://localhost:3000/api/' + category + '/' + id)
+    fetch(host + 'api/' + category + '/' + id)
         .then(element => element.json())
         .then(function (data) {
             let price = data.price;
@@ -23,36 +18,11 @@ function calculatePrice() {
                 document.querySelector("span.product-price").innerHTML = ((price) / 100).toFixed(2) + "€";
             }
         })
-
 }
 
-//Fonction permettant d'ajouté un élèment dans le panier
-function addBasket(element) {
-    // on récupére la personnalisation sélectionné
-    const specificity = $("input[type='radio'][name='custom']:checked").prop("id")
-    // On  vérifie une personnalisation a bien été choisie
+//Focntion permettant d'afficher  le message spécifique lors de l'ajout d'un produit dans le panier
+function displayAdditionMessage(specificity, quantity){
     if (specificity != undefined) {
-        var quantity = parseInt(document.querySelector('.product-input-quantity').value);
-        // Si une personnalisation a été chosie, on vérifie que la quantité à été sélectionnée si ce n'est pas le cas quantity =  1
-        if (Number.isNaN(quantity) || quantity < 1) {
-            quantity = 1
-        }
-
-        // On verifie que ce produit avec cette personnalisation n'est pas déjà présent dans le panier
-        // S'il y est déjà, on ajouter la quantité sélectionné à l'élèment déjà présent dans le panier
-        // Sinon on ajoute simplement le produit
-        var product = { "id": element._id, "category": category, "custom": specificity, "quantity": quantity };
-        var basket = JSON.parse(localStorage.getItem('basket')) || []
-        const sameElement = basket.filter(element => element.id == id && element.custom == specificity)
-        if (sameElement.length == 1) {
-            sameElement[0].quantity += quantity;
-        } else {
-            basket.push(product);
-        }
-        // On met à jour le panier présent dans le stockage local
-        localStorage.setItem('basket', JSON.stringify(basket));
-
-        // Enfin on formate et affiche le message adéquat
         if (document.querySelectorAll('p.alert').length == 0) {
             var alertMsg = document.createElement('p');
             alertMsg.classList.add("alert");
@@ -98,11 +68,40 @@ function addBasket(element) {
         }
     }
 }
+//Fonction permettant d'ajouté un élèment dans le panier
+function addBasket(element) {
+    // on récupére la personnalisation sélectionné
+    const specificity = $("input[type='radio'][name='custom']:checked").prop("id")
+    // On  vérifie une personnalisation a bien été choisie
+    if (specificity != undefined) {
+        var quantity = parseInt(document.querySelector('.product-input-quantity').value);
+        // Si une personnalisation a été chosie, on vérifie que la quantité à été sélectionnée si ce n'est pas le cas quantity =  1
+        if (Number.isNaN(quantity) || quantity < 1) {
+            quantity = 1
+        }
+
+        // On verifie que ce produit avec cette personnalisation n'est pas déjà présent dans le panier
+        // S'il y est déjà, on ajouter la quantité sélectionné à l'élèment déjà présent dans le panier
+        // Sinon on ajoute simplement le produit
+        var product = { "id": element._id, "category": category, "custom": specificity, "quantity": quantity };
+        var basket = JSON.parse(localStorage.getItem('basket')) || []
+        const sameElement = basket.filter(element => element.id == id && element.custom == specificity)
+        if (sameElement.length == 1) {
+            sameElement[0].quantity += quantity;
+        } else {
+            basket.push(product);
+        }
+        // On met à jour le panier présent dans le stockage local
+        localStorage.setItem('basket', JSON.stringify(basket));
+
+        // Enfin on formate et affiche le message adéquat
+        displayAdditionMessage(specificity, quantity) }
+    numberArticleBasket()
+}
 
 numberArticleBasket()
-
 // Créer un tableau regroupant les adresses API (les adresses qui récupérent l'ensemble des tableaux des produits de la catégorie)
-let allItemsUrl = { "cameras": "http://localhost:3000/api/cameras/", "teddies": "http://localhost:3000/api/teddies/", "furniture": "http://localhost:3000/api/furniture/" };
+let allItemsUrl = { "cameras": host + "api/cameras/", "teddies": host + "api/teddies/", "furniture": host + "api/furniture/" };
 // Tableaux référencant les personnalisations possibles en fonctions des catégories des produits.
 let customByCategory = { "cameras": "lenses", "teddies": "colors", "furniture": "varnish" };
 
@@ -156,6 +155,7 @@ request.onreadystatechange = function () {
 
         // Ajoût des textes dans les éléments nécessaires
         h1.innerHTML = element.name;
+        inputQuantity.value = "1";
         customSentence.innerHTML = "Choississez la personnalisation qui vous convient :";
         button.innerHTML = "Ajouter au panier";
         span.innerHTML = (element.price / 100).toFixed(2) + "€";

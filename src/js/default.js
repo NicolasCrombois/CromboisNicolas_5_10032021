@@ -1,3 +1,4 @@
+//fonction permettant d'afficher l'ensemble des produits
 function displayProduct(listApi) {
     listApi.forEach(elementList => {
         var request = new XMLHttpRequest();
@@ -19,27 +20,25 @@ function displayProduct(listApi) {
                     divContainer.classList.add("card");
                     divContainer.id = element._id;
                     img.classList.add("card-img-top");
-                    if (elementList == "http://localhost:3000/api/cameras/") {
+                    
+                    if (elementList == host + "api/cameras/") {
                         img.alt = "Photo de la caméra " + element.name;
-                    } else if (elementList == "http://localhost:3000/api/teddies/") {
+                    } else if (elementList == host + "api/teddies/") {
                         img.alt = "Photo de la peluche " + element.name;
-                    } else if (elementList == "http://localhost:3000/api/furniture/") {
+                    } else if (elementList == host + "api/furniture/") {
                         img.alt = "Photo d'un " + element.name;
                     }
-
                     img.src = element.imageUrl;
                     span.innerHTML = (element.price / 100).toFixed(2) + "€";
                     p.innerHTML = element.description;
                     h3.innerHTML = element.name;
-                    if (elementList == "http://localhost:3000/api/cameras/") {
+                    if (elementList == host + "api/cameras/") {
                         a.href = "product.html?category=cameras&id=" + element._id;
-                    } else if (elementList == "http://localhost:3000/api/teddies/") {
+                    } else if (elementList == host + "api/teddies/") {
                         a.href = "product.html?category=teddies&id=" + element._id;
-                    } else if (elementList == "http://localhost:3000/api/furniture/") {
+                    } else if (elementList == host + "api/furniture/") {
                         a.href = "product.html?category=furniture&id=" + element._id;
                     }
-
-
                     divBody.appendChild(img);
                     divBody.appendChild(h3);
                     divBody.appendChild(p);
@@ -54,29 +53,27 @@ function displayProduct(listApi) {
         };
         request.open("GET", elementList);
         request.send();
-
     });
 }
 
-//Si l'utilisateur choisi un filtre
+//Si l'utilisateur choisi un filtre, on réalise les requêtes spécificiques
 function selectCategoryProduct() {
     let allFilterButton = document.querySelectorAll('.categoryProduct input[name="category"]');
     let arrayApiUrlCategorySelected = [];
     allFilterButton.forEach(element => {
         if (element.checked) {
-            arrayApiUrlCategorySelected.push("http://localhost:3000/api/" + element.id + "/")
+            arrayApiUrlCategorySelected.push(host + "api/" + element.id + "/")
         }
     })
     if (arrayApiUrlCategorySelected.length == 0) {
-        arrayApiUrlCategorySelected = ["http://localhost:3000/api/cameras/", "http://localhost:3000/api/teddies/", "http://localhost:3000/api/furniture/"]
+        arrayApiUrlCategorySelected = [host + "api/cameras/", host + "api/teddies/", host + "api/furniture/"]
     }
     document.querySelectorAll('div.card').forEach(element => {
         element.remove()
     })
-    console.log(arrayApiUrlCategorySelected)
     displayProduct(arrayApiUrlCategorySelected)
 }
 
 numberArticleBasket()
-let allItemsUrl = ["http://localhost:3000/api/cameras/", "http://localhost:3000/api/teddies/", "http://localhost:3000/api/furniture/"];
+let allItemsUrl = [host + "api/cameras/", host + "api/teddies/", host + "api/furniture/"];
 displayProduct(allItemsUrl)
