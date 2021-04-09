@@ -93,9 +93,9 @@ function addBasket(element) {
         }
         // On met à jour le panier présent dans le stockage local
         localStorage.setItem('basket', JSON.stringify(basket));
-
-        // Enfin on formate et affiche le message adéquat
-        displayAdditionMessage(specificity, quantity) }
+    }
+    // Enfin on formate et affiche le message adéquat
+    displayAdditionMessage(specificity, quantity) 
     numberArticleBasket()
 }
 function displayArticle(element){
