@@ -21,7 +21,7 @@ function clearViewBasket() {
     basketElement.forEach(element => {
         element.remove()
     });
-}//Permet d'afficher le message signalant à l'utilisateur que son panier  est vide.
+}//Permet d'afficher le message signalant à l'utilisateur que son panier est vide.
 function basketEmpty() {
     document.querySelector('#total-price').remove()
     document.querySelector('#user-form').remove()
@@ -43,20 +43,20 @@ function viewProduct(basket, totalPriceFloat) {
                 const productDiv = document.querySelector('#main div.card-list');
 
                 // Créer l'ensemble des éléments HTML nécessaire à la mise en page
-                var h1 = document.createElement('h2');
-                var img = document.createElement('img');
-                var customSentence = document.createElement('p');
-                var custom = document.createElement('span');
-                var deleteButton = document.createElement('button');
-                var containerPrice = document.createElement('p');
-                var labelQuantity = document.createElement('label');
-                var quantity = document.createElement('span');
-                var price = document.createElement('span');
-                var infoProduct = document.createElement('div');
-                var divGlobalProduct = document.createElement('div');
-                var textPrice = document.createElement('p');
-                var totalPrice = document.createElement('span');
-
+                let h1 = document.createElement('h2');
+                let img = document.createElement('img');
+                let customSentence = document.createElement('p');
+                let custom = document.createElement('span');
+                let deleteButton = document.createElement('button');
+                let containerPrice = document.createElement('p');
+                let labelQuantity = document.createElement('label');
+                let quantity = document.createElement('span');
+                let price = document.createElement('span');
+                let infoProduct = document.createElement('div');
+                let divGlobalProduct = document.createElement('div');
+                let textPrice = document.createElement('p');
+                let totalPrice = document.createElement('span');
+                
                 // Ajoût des classes à ces éléments
                 h1.classList.add("product-name");
                 img.classList.add("product-img");
@@ -73,7 +73,6 @@ function viewProduct(basket, totalPriceFloat) {
                 totalPrice.classList.add("totalPrice");
 
                 //Ajout de la fonction à executer  sur le bouton de suppression
-                console.log(article.id + " - " + article.category)
                 deleteButton.onclick = function () { deleteProduct(basket, article.id, article.category, article.custom); };
 
                 // Ajoût de la balise alt spécifique 
@@ -189,7 +188,8 @@ function valideContact() {
     let id_list_teddy = []
     //On vérifie ensuite que les champs du formulaire soient correctement remplis
     var formatEmail = /\S+@\S+\.\S+/;
-    if (firstName != undefined && typeof (firstName) == "string" && lastName != null && typeof (lastName) == "string" && address != null && typeof (address) == "string" && email != null && formatEmail.test(email) && city != null && typeof (city) == "string") {
+    var formatName = /\S+/;
+    if (firstName != undefined && formatName.test(firstName) && lastName != null && formatName.test(lastName) && address != null && typeof (address) == "string" && email != null && formatEmail.test(email) && city != null && typeof (city) == "string") {
         //On trie les produits du panier par catégorie via des tableaux
         //Car l'api réalise des commandes par catégories et non pas sur un panier 
         basket.forEach(element => {
