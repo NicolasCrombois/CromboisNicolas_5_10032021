@@ -1,21 +1,38 @@
 let basket = JSON.parse(localStorage.getItem('basket'));
 const TotalPrice = document.getElementById('total-price');
-//Permet de faire la requête post d'une commande et de récupérer la réponse de celle-ci
-function postOrder(category, id_list, firstName, lastName, city, address, email) {
-    fetch(host+'api/' + category + '/order', {
+
+async function post(endpoint, body) {
+    let data = await fetch(host+'api/' + endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(
-            {
-                contact: { "firstName": firstName, "lastName": lastName, "address": address, "city": city, "email": email },
-                products: id_list
-            }),
+        body: JSON.stringify(body),
     })
-        .then(response => response.json())
-        .then(data => displayOrder(data));
-}//Permet de supprimer les éléments du panier affichés sur la page 
+    .then(response => response.json())
+    .then(data => {return data;})
+    .catch((error) => {
+        console.error('Erreur:', error);
+    });
+    return data
+}
+//Permet de faire la requête post d'une commande et de récupérer la réponse de celle-ci
+async function postOrder(category, id_list, firstName, lastName, city, address, email) {
+    data = await post(category + '/order', {
+        contact: {
+            "firstName": firstName, 
+            "lastName": lastName, 
+            "address": address, 
+            "city": city, 
+            "email": email 
+         }, 
+      products: id_list
+    })
+    return data
+}
+
+
+//Permet de supprimer les éléments du panier affichés sur la page 
 function clearViewBasket() {
     const basketElement = document.querySelectorAll('.product-globalProduct')
     basketElement.forEach(element => {
@@ -32,96 +49,91 @@ function basketEmpty() {
     alert.innerHTML = "Votre panier est vide. <br> Pour passer au paiement d'un produit, ajoutez-le d'abord dans votre panier puis revenez sur cette page.";
     (document.querySelector(".card-list")).appendChild(alert)
 }
+function displayProduct(article, url, totalPriceFloat){
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+            var element = JSON.parse(this.responseText);
+            totalPriceFloat += element.price * article.quantity;
+            // Récupérer l'élément dans lequel les informations poussé
+            const productDiv = document.querySelector('#main div.card-list');
+            // Créer l'ensemble des éléments HTML nécessaire à la mise en page
+            let h1 = document.createElement('h2');
+            let img = document.createElement('img');
+            let customSentence = document.createElement('p');
+            let custom = document.createElement('span');
+            let deleteButton = document.createElement('button');
+            let containerPrice = document.createElement('p');
+            let labelQuantity = document.createElement('label');
+            let quantity = document.createElement('span');
+            let price = document.createElement('span');
+            let infoProduct = document.createElement('div');
+            let divGlobalProduct = document.createElement('div');
+            let textPrice = document.createElement('p');
+            let totalPrice = document.createElement('span');
+            
+            // Ajoût des classes à ces éléments
+            h1.classList.add("product-name");
+            img.classList.add("product-img");
+            customSentence.classList.add("customText");
+            deleteButton.classList.add("btn");
+            deleteButton.classList.add("delete-product");
+            containerPrice.classList.add("product-ContainerPrice");
+            labelQuantity.classList.add("customText");
+            quantity.classList.add("product-quantity");
+            price.classList.add("product-price");
+            infoProduct.classList.add("product-information");
+            divGlobalProduct.classList.add("product-globalProduct");
+            textPrice.classList.add("textPrice");
+            totalPrice.classList.add("totalPrice");
+            //Ajout de la fonction à executer  sur le bouton de suppression
+            deleteButton.onclick = function () { deleteProduct(basket, article.id, article.category, article.custom); };
+            // Ajoût de la balise alt spécifique 
+            if (element.category == "cameras") {
+                img.alt = "Photo de la caméra " + element.name;
+            } else if (element.category == "teddies") {
+                img.alt = "Photo de la peluche " + element.name;
+            } else if (element.category == "furniture") {
+                img.alt = "Photo d'un " + element.name;
+            }
+            // Ajoût de la source de l'image
+            img.src = element.imageUrl;
+            // Ajoût des textes dans les éléments nécessaires
+            h1.innerHTML = element.name;
+            customSentence.innerHTML = "Personnalisation choisie :";
+            custom.innerHTML = article.custom;
+            deleteButton.innerHTML = "<i class=\"fas fa-times\"></i>";
+            price.innerHTML = (element.price / 100) * article.quantity.toFixed(2) + "€";
+            containerPrice.innerHTML = "Prix : ";
+            labelQuantity.innerHTML = "Quantité désirée : ";
+            quantity.innerHTML = article.quantity;
+            textPrice.innerHTML = "Montant total : ";
+            totalPrice.innerHTML = (totalPriceFloat / 100).toFixed(2) + "€";
+            // Ensemble des éléments sont enfin ajoutés dans l'élément parent
+            divGlobalProduct.appendChild(h1);
+            divGlobalProduct.appendChild(img);
+            infoProduct.appendChild(customSentence);
+            infoProduct.appendChild(custom);
+            infoProduct.appendChild(labelQuantity);
+            infoProduct.appendChild(quantity);
+            infoProduct.appendChild(containerPrice);
+            infoProduct.appendChild(price);
+            divGlobalProduct.appendChild(infoProduct)
+            divGlobalProduct.appendChild(deleteButton);
+            productDiv.appendChild(divGlobalProduct);
+            textPrice.appendChild(totalPrice);
+            $('.textPrice').remove()
+            TotalPrice.appendChild(textPrice);
+        }
+    }
+    request.open("GET", url);
+    request.send();
+}
 function viewProduct(basket, totalPriceFloat) {
     basket.forEach(article => {
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                var element = JSON.parse(this.responseText);
-                totalPriceFloat += element.price * article.quantity;
-                // Récupérer l'élément dans lequel les informations poussé
-                const productDiv = document.querySelector('#main div.card-list');
-
-                // Créer l'ensemble des éléments HTML nécessaire à la mise en page
-                let h1 = document.createElement('h2');
-                let img = document.createElement('img');
-                let customSentence = document.createElement('p');
-                let custom = document.createElement('span');
-                let deleteButton = document.createElement('button');
-                let containerPrice = document.createElement('p');
-                let labelQuantity = document.createElement('label');
-                let quantity = document.createElement('span');
-                let price = document.createElement('span');
-                let infoProduct = document.createElement('div');
-                let divGlobalProduct = document.createElement('div');
-                let textPrice = document.createElement('p');
-                let totalPrice = document.createElement('span');
-                
-                // Ajoût des classes à ces éléments
-                h1.classList.add("product-name");
-                img.classList.add("product-img");
-                customSentence.classList.add("customText");
-                deleteButton.classList.add("btn");
-                deleteButton.classList.add("delete-product");
-                containerPrice.classList.add("product-ContainerPrice");
-                labelQuantity.classList.add("customText");
-                quantity.classList.add("product-quantity");
-                price.classList.add("product-price");
-                infoProduct.classList.add("product-information");
-                divGlobalProduct.classList.add("product-globalProduct");
-                textPrice.classList.add("textPrice");
-                totalPrice.classList.add("totalPrice");
-
-                //Ajout de la fonction à executer  sur le bouton de suppression
-                deleteButton.onclick = function () { deleteProduct(basket, article.id, article.category, article.custom); };
-
-                // Ajoût de la balise alt spécifique 
-                if (element.category == "cameras") {
-                    img.alt = "Photo de la caméra " + element.name;
-                } else if (element.category == "teddies") {
-                    img.alt = "Photo de la peluche " + element.name;
-                } else if (element.category == "furniture") {
-                    img.alt = "Photo d'un " + element.name;
-                }
-                // Ajoût de la source de l'image
-                img.src = element.imageUrl;
-
-                // Ajoût des textes dans les éléments nécessaires
-                h1.innerHTML = element.name;
-                customSentence.innerHTML = "Personnalisation choisie :";
-                custom.innerHTML = article.custom;
-                deleteButton.innerHTML = "<i class=\"fas fa-times\"></i>";
-                price.innerHTML = (element.price / 100) * article.quantity.toFixed(2) + "€";
-                containerPrice.innerHTML = "Prix : ";
-                labelQuantity.innerHTML = "Quantité désirée : ";
-                quantity.innerHTML = article.quantity;
-                textPrice.innerHTML = "Montant total : ";
-
-                totalPrice.innerHTML = (totalPriceFloat / 100).toFixed(2) + "€";
-
-                // Ensemble des éléments sont enfin ajoutés dans l'élément parent
-                divGlobalProduct.appendChild(h1);
-                divGlobalProduct.appendChild(img);
-                infoProduct.appendChild(customSentence);
-                infoProduct.appendChild(custom);
-                infoProduct.appendChild(labelQuantity);
-                infoProduct.appendChild(quantity);
-                infoProduct.appendChild(containerPrice);
-                infoProduct.appendChild(price);
-                divGlobalProduct.appendChild(infoProduct)
-                divGlobalProduct.appendChild(deleteButton);
-                productDiv.appendChild(divGlobalProduct);
-                textPrice.appendChild(totalPrice);
-                $('.textPrice').remove()
-                TotalPrice.appendChild(textPrice);
-
-            }
-        }
-        request.open("GET", host + "api/" + article.category + "/" + article.id);
-        request.send();
-
-    });
-}
+        displayProduct(article, host + "api/" + article.category + "/" + article.id, totalPriceFloat)
+    })
+};
 
 function displayOrder(data) {
     //Afin d'afficher correctement les commandes réalisés, il faut dans un premier temps enlever les éléments présents
@@ -176,7 +188,7 @@ function deleteProduct(basket, id, category, custom) {
     }
 }
 
-function valideContact() {
+async function valideContact() {
     const firstName = document.getElementById("firstName").value
     const lastName = document.getElementById("lastName").value
     const address = document.getElementById("address").value
@@ -214,11 +226,14 @@ function valideContact() {
             document.getElementById('main').appendChild(totalPriceSentence);
         }
         if (id_list_camera.length != 0) {
-            postOrder("cameras", id_list_camera, firstName, lastName, city, address, email)
+            let order = await postOrder("cameras", id_list_camera, firstName, lastName, city, address, email)
+            displayOrder(order);
         } if (id_list_furniture.length != 0) {
-            postOrder("furniture", id_list_furniture, firstName, lastName, city, address, email)
+            let order = await postOrder("furniture", id_list_furniture, firstName, lastName, city, address, email)
+            displayOrder(order);
         } if (id_list_teddy.length != 0) {
-            postOrder("teddies", id_list_teddy, firstName, lastName, city, address, email)
+            let order = await postOrder("teddies", id_list_teddy, firstName, lastName, city, address, email)
+            displayOrder(order);
         }
 
     } else {
