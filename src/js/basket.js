@@ -1,8 +1,8 @@
 let basket = JSON.parse(localStorage.getItem('basket'));
 const TotalPrice = document.getElementById('total-price');
 
-async function post(endpoint, body) {
-    let data = await fetch(host+'api/' + endpoint, {
+function post(endpoint, body) {
+    fetch(host+'api/' + endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -10,15 +10,14 @@ async function post(endpoint, body) {
         body: JSON.stringify(body),
     })
     .then(response => response.json())
-    .then(data => {return data;})
+    .then(data => displayOrder(data))
     .catch((error) => {
         console.error('Erreur:', error);
     });
-    return data
 }
 //Permet de faire la requête post d'une commande et de récupérer la réponse de celle-ci
-async function postOrder(category, id_list, firstName, lastName, city, address, email) {
-    data = await post(category + '/order', {
+function postOrder(category, id_list, firstName, lastName, city, address, email) {
+    post(category + '/order', {
         contact: {
             "firstName": firstName, 
             "lastName": lastName, 
@@ -28,7 +27,6 @@ async function postOrder(category, id_list, firstName, lastName, city, address, 
          }, 
       products: id_list
     })
-    return data
 }
 
 
@@ -152,7 +150,7 @@ function displayOrder(data) {
 
 
     divOrder.classList.add("unit-order");
-
+    
     title.innerHTML = "Numéro de commande : " + data.orderId;
     sentence.innerHTML = 'Cette commande comprend l\'/les article(s) suivant(s):';
     divOrder.appendChild(title);
@@ -226,14 +224,11 @@ async function valideContact() {
             document.getElementById('main').appendChild(totalPriceSentence);
         }
         if (id_list_camera.length != 0) {
-            let order = await postOrder("cameras", id_list_camera, firstName, lastName, city, address, email)
-            displayOrder(order);
+            let order = postOrder("cameras", id_list_camera, firstName, lastName, city, address, email)
         } if (id_list_furniture.length != 0) {
-            let order = await postOrder("furniture", id_list_furniture, firstName, lastName, city, address, email)
-            displayOrder(order);
+            let order = postOrder("furniture", id_list_furniture, firstName, lastName, city, address, email)
         } if (id_list_teddy.length != 0) {
-            let order = await postOrder("teddies", id_list_teddy, firstName, lastName, city, address, email)
-            displayOrder(order);
+            let order = postOrder("teddies", id_list_teddy, firstName, lastName, city, address, email)
         }
 
     } else {
